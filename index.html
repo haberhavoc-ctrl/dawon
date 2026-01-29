@@ -539,6 +539,102 @@
             display: block;
         }
 
+        /* 비밀번호 모달 */
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-modal.show {
+            display: flex;
+        }
+
+        .password-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-box h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        .password-input:focus {
+            border-color: #667eea;
+        }
+
+        .password-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .password-submit {
+            flex: 1;
+            background: #667eea;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .password-submit:hover {
+            background: #5568d3;
+        }
+
+        .password-cancel {
+            flex: 1;
+            background: #999;
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .password-cancel:hover {
+            background: #777;
+        }
+
+        .password-error {
+            color: #ff6b6b;
+            font-size: 0.9em;
+            margin-top: -10px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .password-error.show {
+            display: block;
+        }
+
         /* 스크롤바 스타일 */
         .episodes-section::-webkit-scrollbar {
             width: 8px;
@@ -706,19 +802,42 @@
                 <div id="animeListContainer" class="anime-list"></div>
             </div>
         </div>
+
+        <!-- 비밀번호 입력 모달 -->
+        <div id="passwordModal" class="password-modal">
+            <div class="password-box">
+                <h2>🔒 관리자 인증</h2>
+                <p style="text-align: center; color: #666; margin-bottom: 20px;">비밀번호를 입력하세요</p>
+                <input 
+                    type="password" 
+                    id="passwordInput" 
+                    class="password-input" 
+                    placeholder="비밀번호"
+                    onkeypress="if(event.key === 'Enter') checkPassword()"
+                >
+                <div id="passwordError" class="password-error">비밀번호가 올바르지 않습니다.</div>
+                <div class="password-buttons">
+                    <button class="password-cancel" onclick="closePasswordModal()">취소</button>
+                    <button class="password-submit" onclick="checkPassword()">확인</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
+        // 관리자 비밀번호 (여기서 변경 가능)
+        const ADMIN_PASSWORD = "admin123";
+
         // 초기 샘플 데이터
         const defaultAnimeData = [
             {
                 id: 1,
-                title: "블리치",
+                title: "모험의 시작",
                 icon: "🗺️",
                 episodes: [
-                    { ep: 1, title: "블리치 1화", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-                    { ep: 2, title: "블리치 2화", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+                    { ep: 1, title: "여정의 시작", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
+                    { ep: 2, title: "첫 번째 시련", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
                 ]
             },
             {
@@ -904,11 +1023,38 @@
 
         // 관리자 화면 표시
         function showAdminScreen() {
-            document.getElementById('mainScreen').style.display = 'none';
-            document.getElementById('playerScreen').style.display = 'none';
-            document.getElementById('adminScreen').style.display = 'block';
-            renderAnimeList();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // 비밀번호 모달 표시
+            document.getElementById('passwordModal').classList.add('show');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').classList.remove('show');
+            document.getElementById('passwordInput').focus();
+        }
+
+        // 비밀번호 확인
+        function checkPassword() {
+            const inputPassword = document.getElementById('passwordInput').value;
+            
+            if (inputPassword === ADMIN_PASSWORD) {
+                // 비밀번호 맞음 - 관리자 화면 진입
+                closePasswordModal();
+                document.getElementById('mainScreen').style.display = 'none';
+                document.getElementById('playerScreen').style.display = 'none';
+                document.getElementById('adminScreen').style.display = 'block';
+                renderAnimeList();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                // 비밀번호 틀림
+                document.getElementById('passwordError').classList.add('show');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        // 비밀번호 모달 닫기
+        function closePasswordModal() {
+            document.getElementById('passwordModal').classList.remove('show');
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').classList.remove('show');
         }
 
         // 메인으로 돌아가기
@@ -1087,5 +1233,4 @@
         renderMainScreen();
     </script>
 </body>
-
 </html>
