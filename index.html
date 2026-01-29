@@ -604,7 +604,6 @@
             </div>
         </header>
 
-        <!-- 메인 화면: 애니메이션 목록 -->
         <div id="mainScreen">
             <div id="animeGrid" class="anime-grid"></div>
 
@@ -615,7 +614,6 @@
             </div>
         </div>
 
-        <!-- 재생 화면 -->
         <div id="playerScreen">
             <div class="player-header">
                 <div class="series-title" id="seriesTitle"></div>
@@ -642,7 +640,6 @@
             </div>
         </div>
 
-        <!-- 관리자 화면 -->
         <div id="adminScreen">
             <div class="admin-header">
                 <div class="admin-title">⚙️ 관리자 페이지</div>
@@ -657,7 +654,6 @@
                 <button class="tab-btn" onclick="switchTab('list')">애니메이션 목록</button>
             </div>
 
-            <!-- 수동 추가 탭 -->
             <div id="manualTab" class="tab-content active">
                 <h2>에피소드 수동 추가</h2>
                 <form onsubmit="addEpisodeManual(event)">
@@ -681,7 +677,6 @@
                 </form>
             </div>
 
-            <!-- CSV 업로드 탭 -->
             <div id="csvTab" class="tab-content">
                 <h2>CSV 파일로 일괄 추가</h2>
                 <div class="file-upload-area" onclick="document.getElementById('csvFile').click()">
@@ -700,7 +695,6 @@
                 </div>
             </div>
 
-            <!-- 애니메이션 목록 탭 -->
             <div id="listTab" class="tab-content">
                 <h2>전체 애니메이션 목록</h2>
                 <div id="animeListContainer" class="anime-list"></div>
@@ -710,24 +704,386 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
-        // 초기 샘플 데이터
+        // 초기 데이터 (블리치 데이터 포함)
         const defaultAnimeData = [
             {
                 id: 1,
-                title: "모험의 시작",
-                icon: "🗺️",
+                title: "블리치 (Bleach)",
+                icon: "⚔️",
                 episodes: [
-                    { ep: 1, title: "여정의 시작", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-                    { ep: 2, title: "첫 번째 시련", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
+                    { ep: 1, title: "1", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k1" },
+                    { ep: 2, title: "2", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k2" },
+                    { ep: 3, title: "3", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k3" },
+                    { ep: 4, title: "4", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k4" },
+                    { ep: 5, title: "5", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k5" },
+                    { ep: 6, title: "6", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k6" },
+                    { ep: 7, title: "7", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k7" },
+                    { ep: 8, title: "8", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k8" },
+                    { ep: 9, title: "9", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k9" },
+                    { ep: 10, title: "10", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k10" },
+                    { ep: 11, title: "11", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k11" },
+                    { ep: 12, title: "12", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k12" },
+                    { ep: 13, title: "13", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k13" },
+                    { ep: 14, title: "14", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k14" },
+                    { ep: 15, title: "15", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k15" },
+                    { ep: 16, title: "16", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k16" },
+                    { ep: 17, title: "17", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k17" },
+                    { ep: 18, title: "18", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k18" },
+                    { ep: 19, title: "19", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k19" },
+                    { ep: 20, title: "20", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k20" },
+                    { ep: 21, title: "21", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k21" },
+                    { ep: 22, title: "22", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k22" },
+                    { ep: 23, title: "23", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k23" },
+                    { ep: 24, title: "24", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k24" },
+                    { ep: 25, title: "25", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k25" },
+                    { ep: 26, title: "26", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k26" },
+                    { ep: 27, title: "27", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k27" },
+                    { ep: 28, title: "28", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k28" },
+                    { ep: 29, title: "29", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k29" },
+                    { ep: 30, title: "30", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k30" },
+                    { ep: 31, title: "31", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k31" },
+                    { ep: 32, title: "32", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k32" },
+                    { ep: 33, title: "33", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k33" },
+                    { ep: 34, title: "34", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k34" },
+                    { ep: 35, title: "35", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k35" },
+                    { ep: 36, title: "36", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k36" },
+                    { ep: 37, title: "37", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k37" },
+                    { ep: 38, title: "38", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k38" },
+                    { ep: 39, title: "39", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k39" },
+                    { ep: 40, title: "40", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k40" },
+                    { ep: 41, title: "41", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k41" },
+                    { ep: 42, title: "42", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k42" },
+                    { ep: 43, title: "43", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k43" },
+                    { ep: 44, title: "44", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k44" },
+                    { ep: 45, title: "45", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k45" },
+                    { ep: 46, title: "46", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k46" },
+                    { ep: 47, title: "47", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k47" },
+                    { ep: 48, title: "48", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k48" },
+                    { ep: 49, title: "49", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k49" },
+                    { ep: 50, title: "50", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k50" },
+                    { ep: 51, title: "51", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k51" },
+                    { ep: 52, title: "52", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k52" },
+                    { ep: 53, title: "53", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k53" },
+                    { ep: 54, title: "54", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k54" },
+                    { ep: 55, title: "55", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k55" },
+                    { ep: 56, title: "56", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k56" },
+                    { ep: 57, title: "57", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k57" },
+                    { ep: 58, title: "58", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k58" },
+                    { ep: 59, title: "59", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k59" },
+                    { ep: 60, title: "60", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k60" },
+                    { ep: 61, title: "61", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k61" },
+                    { ep: 62, title: "62", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k62" },
+                    { ep: 63, title: "63", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k63" },
+                    { ep: 64, title: "64", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k64" },
+                    { ep: 65, title: "65", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k65" },
+                    { ep: 66, title: "66", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k66" },
+                    { ep: 67, title: "67", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k67" },
+                    { ep: 68, title: "68", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k68" },
+                    { ep: 69, title: "69", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k69" },
+                    { ep: 70, title: "70", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k70" },
+                    { ep: 71, title: "71", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k71" },
+                    { ep: 72, title: "72", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k72" },
+                    { ep: 73, title: "73", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k73" },
+                    { ep: 74, title: "74", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k74" },
+                    { ep: 75, title: "75", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k75" },
+                    { ep: 76, title: "76", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k76" },
+                    { ep: 77, title: "77", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k77" },
+                    { ep: 78, title: "78", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k78" },
+                    { ep: 79, title: "79", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k79" },
+                    { ep: 80, title: "80", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k80" },
+                    { ep: 81, title: "81", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k81" },
+                    { ep: 82, title: "82", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k82" },
+                    { ep: 83, title: "83", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k83" },
+                    { ep: 84, title: "84", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k84" },
+                    { ep: 85, title: "85", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k85" },
+                    { ep: 86, title: "86", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k86" },
+                    { ep: 87, title: "87", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k87" },
+                    { ep: 88, title: "88", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k88" },
+                    { ep: 89, title: "89", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k89" },
+                    { ep: 90, title: "90", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k90" },
+                    { ep: 91, title: "91", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k91" },
+                    { ep: 92, title: "92", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k92" },
+                    { ep: 93, title: "93", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k93" },
+                    { ep: 94, title: "94", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k94" },
+                    { ep: 95, title: "95", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k95" },
+                    { ep: 96, title: "96", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k96" },
+                    { ep: 97, title: "97", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k97" },
+                    { ep: 98, title: "98", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k98" },
+                    { ep: 99, title: "99", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k99" },
+                    { ep: 100, title: "100", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k100" },
+                    { ep: 101, title: "101", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k101" },
+                    { ep: 102, title: "102", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k102" },
+                    { ep: 103, title: "103", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k103" },
+                    { ep: 104, title: "104", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k104" },
+                    { ep: 105, title: "105", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k105" },
+                    { ep: 106, title: "106", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k106" },
+                    { ep: 107, title: "107", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k107" },
+                    { ep: 108, title: "108", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k108" },
+                    { ep: 109, title: "109", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k109" },
+                    { ep: 110, title: "110", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k110" },
+                    { ep: 111, title: "111", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k111" },
+                    { ep: 112, title: "112", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k112" },
+                    { ep: 113, title: "113", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k113" },
+                    { ep: 114, title: "114", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k114" },
+                    { ep: 115, title: "115", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k115" },
+                    { ep: 116, title: "116", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k116" },
+                    { ep: 117, title: "117", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k117" },
+                    { ep: 118, title: "118", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k118" },
+                    { ep: 119, title: "119", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k119" },
+                    { ep: 120, title: "120", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k120" },
+                    { ep: 121, title: "121", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k121" },
+                    { ep: 122, title: "122", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k122" },
+                    { ep: 123, title: "123", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k123" },
+                    { ep: 124, title: "124", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k124" },
+                    { ep: 125, title: "125", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k125" },
+                    { ep: 126, title: "126", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k126" },
+                    { ep: 127, title: "127", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k127" },
+                    { ep: 128, title: "128", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k128" },
+                    { ep: 129, title: "129", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k129" },
+                    { ep: 130, title: "130", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k130" },
+                    { ep: 131, title: "131", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k131" },
+                    { ep: 132, title: "132", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k132" },
+                    { ep: 133, title: "133", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k133" },
+                    { ep: 134, title: "134", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k134" },
+                    { ep: 135, title: "135", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k135" },
+                    { ep: 136, title: "136", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k136" },
+                    { ep: 137, title: "137", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k137" },
+                    { ep: 138, title: "138", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k138" },
+                    { ep: 139, title: "139", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k139" },
+                    { ep: 140, title: "140", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k140" },
+                    { ep: 141, title: "141", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k141" },
+                    { ep: 142, title: "142", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k142" },
+                    { ep: 143, title: "143", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k143" },
+                    { ep: 144, title: "144", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k144" },
+                    { ep: 145, title: "145", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k145" },
+                    { ep: 146, title: "146", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k146" },
+                    { ep: 147, title: "147", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k147" },
+                    { ep: 148, title: "148", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k148" },
+                    { ep: 149, title: "149", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k149" },
+                    { ep: 150, title: "150", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k150" },
+                    { ep: 151, title: "151", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k151" },
+                    { ep: 152, title: "152", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k152" },
+                    { ep: 153, title: "153", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k153" },
+                    { ep: 154, title: "154", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k154" },
+                    { ep: 155, title: "155", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k155" },
+                    { ep: 156, title: "156", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k156" },
+                    { ep: 157, title: "157", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k157" },
+                    { ep: 158, title: "158", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k158" },
+                    { ep: 159, title: "159", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k159" },
+                    { ep: 160, title: "160", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k160" },
+                    { ep: 161, title: "161", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k161" },
+                    { ep: 162, title: "162", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k162" },
+                    { ep: 163, title: "163", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k163" },
+                    { ep: 164, title: "164", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k164" },
+                    { ep: 165, title: "165", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k165" },
+                    { ep: 166, title: "166", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k166" },
+                    { ep: 167, title: "167", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k167" },
+                    { ep: 168, title: "168", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k168" },
+                    { ep: 169, title: "169", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k169" },
+                    { ep: 170, title: "170", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k170" },
+                    { ep: 171, title: "171", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k171" },
+                    { ep: 172, title: "172", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k172" },
+                    { ep: 173, title: "173", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k173" },
+                    { ep: 174, title: "174", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k174" },
+                    { ep: 175, title: "175", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k175" },
+                    { ep: 176, title: "176", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k176" },
+                    { ep: 177, title: "177", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k177" },
+                    { ep: 178, title: "178", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k178" },
+                    { ep: 179, title: "179", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k179" },
+                    { ep: 180, title: "180", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k180" },
+                    { ep: 181, title: "181", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k181" },
+                    { ep: 182, title: "182", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k182" },
+                    { ep: 183, title: "183", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k183" },
+                    { ep: 184, title: "184", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k184" },
+                    { ep: 185, title: "185", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k185" },
+                    { ep: 186, title: "186", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k186" },
+                    { ep: 187, title: "187", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k187" },
+                    { ep: 188, title: "188", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k188" },
+                    { ep: 189, title: "189", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k189" },
+                    { ep: 190, title: "190", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k190" },
+                    { ep: 191, title: "191", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k191" },
+                    { ep: 192, title: "192", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k192" },
+                    { ep: 193, title: "193", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k193" },
+                    { ep: 194, title: "194", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k194" },
+                    { ep: 195, title: "195", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k195" },
+                    { ep: 196, title: "196", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k196" },
+                    { ep: 197, title: "197", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k197" },
+                    { ep: 198, title: "198", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k198" },
+                    { ep: 199, title: "199", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k199" },
+                    { ep: 200, title: "200", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k200" },
+                    { ep: 201, title: "201", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k201" },
+                    { ep: 202, title: "202", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k202" },
+                    { ep: 203, title: "203", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k203" },
+                    { ep: 204, title: "204", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k204" },
+                    { ep: 205, title: "205", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k205" },
+                    { ep: 206, title: "206", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k206" },
+                    { ep: 207, title: "207", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k207" },
+                    { ep: 208, title: "208", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k208" },
+                    { ep: 209, title: "209", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k209" },
+                    { ep: 210, title: "210", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k210" },
+                    { ep: 211, title: "211", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k211" },
+                    { ep: 212, title: "212", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k212" },
+                    { ep: 213, title: "213", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k213" },
+                    { ep: 214, title: "214", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k214" },
+                    { ep: 215, title: "215", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k215" },
+                    { ep: 216, title: "216", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k216" },
+                    { ep: 217, title: "217", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k217" },
+                    { ep: 218, title: "218", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k218" },
+                    { ep: 219, title: "219", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k219" },
+                    { ep: 220, title: "220", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k220" },
+                    { ep: 221, title: "221", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k221" },
+                    { ep: 222, title: "222", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k222" },
+                    { ep: 223, title: "223", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k223" },
+                    { ep: 224, title: "224", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k224" },
+                    { ep: 225, title: "225", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k225" },
+                    { ep: 226, title: "226", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k226" },
+                    { ep: 227, title: "227", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k227" },
+                    { ep: 228, title: "228", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k228" },
+                    { ep: 229, title: "229", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k229" },
+                    { ep: 230, title: "230", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k230" },
+                    { ep: 231, title: "231", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k231" },
+                    { ep: 232, title: "232", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k232" },
+                    { ep: 233, title: "233", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k233" },
+                    { ep: 234, title: "234", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k234" },
+                    { ep: 235, title: "235", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k235" },
+                    { ep: 236, title: "236", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k236" },
+                    { ep: 237, title: "237", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k237" },
+                    { ep: 238, title: "238", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k238" },
+                    { ep: 239, title: "239", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k239" },
+                    { ep: 240, title: "240", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k240" },
+                    { ep: 241, title: "241", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k241" },
+                    { ep: 242, title: "242", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k242" },
+                    { ep: 243, title: "243", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k243" },
+                    { ep: 244, title: "244", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k244" },
+                    { ep: 245, title: "245", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k245" },
+                    { ep: 246, title: "246", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k246" },
+                    { ep: 247, title: "247", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k247" },
+                    { ep: 248, title: "248", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k248" },
+                    { ep: 249, title: "249", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k249" },
+                    { ep: 250, title: "250", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k250" },
+                    { ep: 251, title: "251", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k251" },
+                    { ep: 252, title: "252", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k252" },
+                    { ep: 253, title: "253", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k253" },
+                    { ep: 254, title: "254", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k254" },
+                    { ep: 255, title: "255", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k255" },
+                    { ep: 256, title: "256", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k256" },
+                    { ep: 257, title: "257", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k257" },
+                    { ep: 258, title: "258", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k258" },
+                    { ep: 259, title: "259", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k259" },
+                    { ep: 260, title: "260", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k260" },
+                    { ep: 261, title: "261", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k261" },
+                    { ep: 262, title: "262", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k262" },
+                    { ep: 263, title: "263", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k263" },
+                    { ep: 264, title: "264", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k264" },
+                    { ep: 265, title: "265", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k265" },
+                    { ep: 266, title: "266", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k266" },
+                    { ep: 267, title: "267", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k267" },
+                    { ep: 268, title: "268", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k268" },
+                    { ep: 269, title: "269", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k269" },
+                    { ep: 270, title: "270", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k270" },
+                    { ep: 271, title: "271", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k271" },
+                    { ep: 272, title: "272", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k272" },
+                    { ep: 273, title: "273", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k273" },
+                    { ep: 274, title: "274", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k274" },
+                    { ep: 275, title: "275", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k275" },
+                    { ep: 276, title: "276", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k276" },
+                    { ep: 277, title: "277", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k277" },
+                    { ep: 278, title: "278", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k278" },
+                    { ep: 279, title: "279", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k279" },
+                    { ep: 280, title: "280", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k280" },
+                    { ep: 281, title: "281", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k281" },
+                    { ep: 282, title: "282", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k282" },
+                    { ep: 283, title: "283", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k283" },
+                    { ep: 284, title: "284", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k284" },
+                    { ep: 285, title: "285", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k285" },
+                    { ep: 286, title: "286", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k286" },
+                    { ep: 287, title: "287", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k287" },
+                    { ep: 288, title: "288", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k288" },
+                    { ep: 289, title: "289", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k289" },
+                    { ep: 290, title: "290", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k290" },
+                    { ep: 291, title: "291", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k291" },
+                    { ep: 292, title: "292", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k292" },
+                    { ep: 293, title: "293", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k293" },
+                    { ep: 294, title: "294", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k294" },
+                    { ep: 295, title: "295", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k295" },
+                    { ep: 296, title: "296", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k296" },
+                    { ep: 297, title: "297", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k297" },
+                    { ep: 298, title: "298", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k298" },
+                    { ep: 299, title: "299", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k299" },
+                    { ep: 300, title: "300", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k300" },
+                    { ep: 301, title: "301", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k301" },
+                    { ep: 302, title: "302", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k302" },
+                    { ep: 303, title: "303", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k303" },
+                    { ep: 304, title: "304", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k304" },
+                    { ep: 305, title: "305", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k305" },
+                    { ep: 306, title: "306", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k306" },
+                    { ep: 307, title: "307", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k307" },
+                    { ep: 308, title: "308", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k308" },
+                    { ep: 309, title: "309", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k309" },
+                    { ep: 310, title: "310", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k310" },
+                    { ep: 311, title: "311", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k311" },
+                    { ep: 312, title: "312", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k312" },
+                    { ep: 313, title: "313", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k313" },
+                    { ep: 314, title: "314", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k314" },
+                    { ep: 315, title: "315", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k315" },
+                    { ep: 316, title: "316", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k316" },
+                    { ep: 317, title: "317", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k317" },
+                    { ep: 318, title: "318", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k318" },
+                    { ep: 319, title: "319", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k319" },
+                    { ep: 320, title: "320", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k320" },
+                    { ep: 321, title: "321", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k321" },
+                    { ep: 322, title: "322", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k322" },
+                    { ep: 323, title: "323", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k323" },
+                    { ep: 324, title: "324", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k324" },
+                    { ep: 325, title: "325", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k325" },
+                    { ep: 326, title: "326", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k326" },
+                    { ep: 327, title: "327", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k327" },
+                    { ep: 328, title: "328", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k328" },
+                    { ep: 329, title: "329", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k329" },
+                    { ep: 330, title: "330", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k330" },
+                    { ep: 331, title: "331", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k331" },
+                    { ep: 332, title: "332", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k332" },
+                    { ep: 333, title: "333", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k333" },
+                    { ep: 334, title: "334", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k334" },
+                    { ep: 335, title: "335", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k335" },
+                    { ep: 336, title: "336", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k336" },
+                    { ep: 337, title: "337", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k337" },
+                    { ep: 338, title: "338", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k338" },
+                    { ep: 339, title: "339", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k339" },
+                    { ep: 340, title: "340", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k340" },
+                    { ep: 341, title: "341", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k341" },
+                    { ep: 342, title: "342", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k342" },
+                    { ep: 343, title: "343", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k343" },
+                    { ep: 344, title: "344", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k344" },
+                    { ep: 345, title: "345", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k345" },
+                    { ep: 346, title: "346", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k346" },
+                    { ep: 347, title: "347", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k347" },
+                    { ep: 348, title: "348", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k348" },
+                    { ep: 349, title: "349", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k349" },
+                    { ep: 350, title: "350", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k350" },
+                    { ep: 351, title: "351", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k351" },
+                    { ep: 352, title: "352", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k352" },
+                    { ep: 353, title: "353", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k353" },
+                    { ep: 354, title: "354", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k354" },
+                    { ep: 355, title: "355", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k355" },
+                    { ep: 356, title: "356", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k356" },
+                    { ep: 357, title: "357", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k357" },
+                    { ep: 358, title: "358", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k358" },
+                    { ep: 359, title: "359", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k359" },
+                    { ep: 360, title: "360", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k360" },
+                    { ep: 361, title: "361", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k361" },
+                    { ep: 362, title: "362", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k362" },
+                    { ep: 363, title: "363", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k363" },
+                    { ep: 364, title: "364", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k364" },
+                    { ep: 365, title: "365", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k365" },
+                    { ep: 366, title: "366", embedUrl: "https://linkkf.onlinesuri.com/watch/72381/a1/k366" }
                 ]
             },
             {
                 id: 2,
                 title: "드래곤 킹덤",
                 icon: "🐉",
-                episodes: [
-                    { ep: 1, title: "전설의 시작", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-                ]
+                episodes: []
             },
             {
                 id: 3,
@@ -749,8 +1105,9 @@
             }
         ];
 
-        // 데이터 로드 또는 초기화
-        let animeData = JSON.parse(localStorage.getItem('animeData')) || defaultAnimeData;
+        // 데이터 로드 또는 초기화 (새로운 키값 적용: animeData_v2)
+        // 기존 localStorage에 있는 'animeData'는 무시하고 새 버전(v2)을 사용하게 함
+        let animeData = JSON.parse(localStorage.getItem('animeData_v2')) || defaultAnimeData;
 
         const ITEMS_PER_PAGE = 20;
         let currentPage = 0;
@@ -758,9 +1115,9 @@
         let currentAnime = null;
         let currentEpisodeIndex = 0;
 
-        // 데이터 저장
+        // 데이터 저장 (새 키값 사용)
         function saveData() {
-            localStorage.setItem('animeData', JSON.stringify(animeData));
+            localStorage.setItem('animeData_v2', JSON.stringify(animeData));
         }
 
         // 메인 화면 렌더링
@@ -800,7 +1157,7 @@
 
             prevBtn.disabled = currentPage === 0;
             nextBtn.disabled = currentPage >= totalPages - 1;
-            pageInfo.textContent = `${currentPage + 1} / ${totalPages}`;
+            pageInfo.textContent = totalPages > 0 ? `${currentPage + 1} / ${totalPages}` : '0 / 0';
         }
 
         // 이전 페이지
