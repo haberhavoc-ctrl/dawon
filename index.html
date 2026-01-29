@@ -23,7 +23,7 @@
             padding: 20px;
         }
 
-        /* 헤더 및 검색 */
+        /* 헤더 */
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -58,6 +58,7 @@
             transform: scale(1.05);
         }
 
+        /* 검색 */
         .search-container {
             max-width: 600px;
             margin: 0 auto;
@@ -98,7 +99,7 @@
             background: #5568d3;
         }
 
-        /* 메인 화면 */
+        /* 화면 전환 */
         #mainScreen {
             display: block;
         }
@@ -108,6 +109,7 @@
             display: none;
         }
 
+        /* 애니메이션 그리드 */
         .anime-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -403,8 +405,7 @@
             margin-bottom: 8px;
         }
 
-        .form-group input,
-        .form-group textarea {
+        .form-group input {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
@@ -413,8 +414,7 @@
             outline: none;
         }
 
-        .form-group input:focus,
-        .form-group textarea:focus {
+        .form-group input:focus {
             border-color: #667eea;
         }
 
@@ -635,7 +635,7 @@
             display: block;
         }
 
-        /* 스크롤바 스타일 */
+        /* 스크롤바 */
         .episodes-section::-webkit-scrollbar {
             width: 8px;
         }
@@ -648,10 +648,6 @@
         .episodes-section::-webkit-scrollbar-thumb {
             background: #667eea;
             border-radius: 10px;
-        }
-
-        .episodes-section::-webkit-scrollbar-thumb:hover {
-            background: #5568d3;
         }
 
         /* 반응형 */
@@ -675,11 +671,6 @@
             h1 {
                 font-size: 2em;
             }
-
-            .admin-btn {
-                position: static;
-                margin-bottom: 15px;
-            }
         }
     </style>
 </head>
@@ -700,10 +691,9 @@
             </div>
         </header>
 
-        <!-- 메인 화면: 애니메이션 목록 -->
+        <!-- 메인 화면 -->
         <div id="mainScreen">
             <div id="animeGrid" class="anime-grid"></div>
-
             <div class="pagination">
                 <button class="arrow-btn" id="prevBtn" onclick="previousPage()">←</button>
                 <span class="page-info" id="pageInfo">1 / 1</span>
@@ -717,7 +707,6 @@
                 <div class="series-title" id="seriesTitle"></div>
                 <button class="back-btn" onclick="goBack()">← 목록으로</button>
             </div>
-
             <div class="player-content">
                 <div class="video-section">
                     <div class="video-wrapper">
@@ -730,7 +719,6 @@
                     </div>
                     <div class="current-episode-title" id="currentEpisodeTitle"></div>
                 </div>
-
                 <div class="episodes-section">
                     <div class="episodes-title">에피소드 목록</div>
                     <div id="episodeList"></div>
@@ -756,7 +744,7 @@
             <!-- 수동 추가 탭 -->
             <div id="manualTab" class="tab-content active">
                 <h2>에피소드 수동 추가</h2>
-                <form onsubmit="addEpisodeManual(event)">
+                <form id="manualForm">
                     <div class="form-group">
                         <label>애니메이션 ID</label>
                         <input type="number" id="manualAnimeId" required placeholder="예: 1">
@@ -785,7 +773,6 @@
                     <div class="upload-text">클릭하여 CSV 파일 선택</div>
                     <input type="file" id="csvFile" accept=".csv" onchange="uploadCSV(event)">
                 </div>
-
                 <div class="csv-example">
                     <h3>📝 CSV 파일 형식 예시</h3>
                     <pre>애니메이션ID,회차번호,회차제목,URL
@@ -803,7 +790,7 @@
             </div>
         </div>
 
-        <!-- 비밀번호 입력 모달 -->
+        <!-- 비밀번호 모달 -->
         <div id="passwordModal" class="password-modal">
             <div class="password-box">
                 <h2>🔒 관리자 인증</h2>
@@ -826,7 +813,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script>
-        // 관리자 비밀번호 (여기서 변경 가능)
+        // 관리자 비밀번호 (580번째 줄 - 여기서 변경 가능)
         const ADMIN_PASSWORD = "admin123";
 
         // 초기 샘플 데이터
@@ -835,18 +822,13 @@
                 id: 1,
                 title: "모험의 시작",
                 icon: "🗺️",
-                episodes: [
-                    { ep: 1, title: "여정의 시작", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" },
-                    { ep: 2, title: "첫 번째 시련", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-                ]
+                episodes: []
             },
             {
                 id: 2,
                 title: "드래곤 킹덤",
                 icon: "🐉",
-                episodes: [
-                    { ep: 1, title: "전설의 시작", embedUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ" }
-                ]
+                episodes: []
             },
             {
                 id: 3,
@@ -868,7 +850,7 @@
             }
         ];
 
-        // 데이터 로드 또는 초기화
+        // localStorage에서 데이터 로드
         let animeData = JSON.parse(localStorage.getItem('animeData')) || defaultAnimeData;
 
         const ITEMS_PER_PAGE = 20;
@@ -1000,237 +982,4 @@
             });
         }
 
-        // 특정 에피소드 재생
-        function playEpisode(index) {
-            currentEpisodeIndex = index;
-            const episode = currentAnime.episodes[index];
-            
-            document.getElementById('videoFrame').src = episode.embedUrl;
-            document.getElementById('currentEpisodeTitle').textContent = 
-                `${episode.ep}화: ${episode.title}`;
-            
-            renderEpisodeList();
-        }
-
-        // 목록으로 돌아가기
-        function goBack() {
-            document.getElementById('mainScreen').style.display = 'block';
-            document.getElementById('playerScreen').style.display = 'none';
-            document.getElementById('videoFrame').src = '';
-            currentAnime = null;
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // 관리자 화면 표시
-        function showAdminScreen() {
-            // 비밀번호 모달 표시
-            document.getElementById('passwordModal').classList.add('show');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').classList.remove('show');
-            document.getElementById('passwordInput').focus();
-        }
-
-        // 비밀번호 확인
-        function checkPassword() {
-            const inputPassword = document.getElementById('passwordInput').value;
-            
-            if (inputPassword === ADMIN_PASSWORD) {
-                // 비밀번호 맞음 - 관리자 화면 진입
-                closePasswordModal();
-                document.getElementById('mainScreen').style.display = 'none';
-                document.getElementById('playerScreen').style.display = 'none';
-                document.getElementById('adminScreen').style.display = 'block';
-                renderAnimeList();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                // 비밀번호 틀림
-                document.getElementById('passwordError').classList.add('show');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-            }
-        }
-
-        // 비밀번호 모달 닫기
-        function closePasswordModal() {
-            document.getElementById('passwordModal').classList.remove('show');
-            document.getElementById('passwordInput').value = '';
-            document.getElementById('passwordError').classList.remove('show');
-        }
-
-        // 메인으로 돌아가기
-        function goBackToMain() {
-            document.getElementById('adminScreen').style.display = 'none';
-            document.getElementById('mainScreen').style.display = 'block';
-            currentData = animeData;
-            renderMainScreen();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        // 탭 전환
-        function switchTab(tabName) {
-            // 탭 버튼 활성화
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-
-            // 탭 컨텐츠 활성화
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-            
-            if (tabName === 'manual') {
-                document.getElementById('manualTab').classList.add('active');
-            } else if (tabName === 'csv') {
-                document.getElementById('csvTab').classList.add('active');
-            } else if (tabName === 'list') {
-                document.getElementById('listTab').classList.add('active');
-                renderAnimeList();
-            }
-        }
-
-        // 수동으로 에피소드 추가
-        function addEpisodeManual(event) {
-            event.preventDefault();
-            
-            const animeId = parseInt(document.getElementById('manualAnimeId').value);
-            const episodeNum = parseInt(document.getElementById('manualEpisodeNum').value);
-            const episodeTitle = document.getElementById('manualEpisodeTitle').value;
-            const episodeUrl = document.getElementById('manualEpisodeUrl').value;
-
-            const anime = animeData.find(a => a.id === animeId);
-
-            if (!anime) {
-                alert('해당 애니메이션 ID를 찾을 수 없습니다.');
-                return;
-            }
-
-            // 중복 확인
-            const existingEpisode = anime.episodes.find(e => e.ep === episodeNum);
-            if (existingEpisode) {
-                if (!confirm('이미 존재하는 회차입니다. 덮어쓰시겠습니까?')) {
-                    return;
-                }
-                existingEpisode.title = episodeTitle;
-                existingEpisode.embedUrl = episodeUrl;
-            } else {
-                anime.episodes.push({
-                    ep: episodeNum,
-                    title: episodeTitle,
-                    embedUrl: episodeUrl
-                });
-                anime.episodes.sort((a, b) => a.ep - b.ep);
-            }
-
-            saveData();
-            showSuccessMessage('에피소드가 성공적으로 추가되었습니다!');
-            event.target.reset();
-            renderAnimeList();
-        }
-
-        // CSV 업로드
-        function uploadCSV(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-
-            Papa.parse(file, {
-                header: true,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    let addedCount = 0;
-                    let errorCount = 0;
-
-                    results.data.forEach(row => {
-                        const animeId = parseInt(row['애니메이션ID'] || row['animeId']);
-                        const episodeNum = parseInt(row['회차번호'] || row['episodeNum']);
-                        const episodeTitle = row['회차제목'] || row['title'];
-                        const embedUrl = row['URL'] || row['url'];
-
-                        if (!animeId || !episodeNum || !episodeTitle || !embedUrl) {
-                            errorCount++;
-                            return;
-                        }
-
-                        const anime = animeData.find(a => a.id === animeId);
-                        if (!anime) {
-                            errorCount++;
-                            return;
-                        }
-
-                        const existingEpisode = anime.episodes.find(e => e.ep === episodeNum);
-                        if (existingEpisode) {
-                            existingEpisode.title = episodeTitle;
-                            existingEpisode.embedUrl = embedUrl;
-                        } else {
-                            anime.episodes.push({
-                                ep: episodeNum,
-                                title: episodeTitle,
-                                embedUrl: embedUrl
-                            });
-                        }
-                        addedCount++;
-                    });
-
-                    // 에피소드 정렬
-                    animeData.forEach(anime => {
-                        anime.episodes.sort((a, b) => a.ep - b.ep);
-                    });
-
-                    saveData();
-                    showSuccessMessage(`${addedCount}개의 에피소드가 추가되었습니다. ${errorCount > 0 ? `(${errorCount}개 실패)` : ''}`);
-                    event.target.value = '';
-                    renderAnimeList();
-                },
-                error: function(error) {
-                    alert('CSV 파일을 읽는 중 오류가 발생했습니다: ' + error.message);
-                }
-            });
-        }
-
-        // 애니메이션 목록 렌더링
-        function renderAnimeList() {
-            const container = document.getElementById('animeListContainer');
-            container.innerHTML = '';
-
-            animeData.forEach(anime => {
-                const item = document.createElement('div');
-                item.className = 'anime-list-item';
-                
-                item.innerHTML = `
-                    <div>
-                        <h3>${anime.icon} ${anime.title}</h3>
-                        <p>ID: ${anime.id} | 에피소드: ${anime.episodes.length}개</p>
-                    </div>
-                    <button class="delete-btn" onclick="deleteAnime(${anime.id})">삭제</button>
-                `;
-                
-                container.appendChild(item);
-            });
-        }
-
-        // 애니메이션 삭제
-        function deleteAnime(animeId) {
-            if (!confirm('이 애니메이션과 모든 에피소드를 삭제하시겠습니까?')) {
-                return;
-            }
-
-            animeData = animeData.filter(a => a.id !== animeId);
-            saveData();
-            currentData = animeData;
-            showSuccessMessage('애니메이션이 삭제되었습니다.');
-            renderAnimeList();
-            renderMainScreen();
-        }
-
-        // 성공 메시지 표시
-        function showSuccessMessage(message) {
-            const msgEl = document.getElementById('successMessage');
-            msgEl.textContent = message;
-            msgEl.classList.add('show');
-            
-            setTimeout(() => {
-                msgEl.classList.remove('show');
-            }, 3000);
-        }
-
-        // 초기 로드
-        renderMainScreen();
-    </script>
-</body>
-</html>
+        //
